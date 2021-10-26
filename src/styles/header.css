@@ -1,0 +1,200 @@
+
+.header {
+    height: 5rem;
+    background-image: linear-gradient(rgb(30, 153, 253), rgb(50, 148, 11));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.7rem 7%;
+    z-index: 1000;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .header .logo img {
+    height: 4rem;
+  }
+  .header .navbar a {
+    color: rgb(232, 234, 241);
+    margin: 0 1rem;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: var(--font-family-header);
+  }
+  .header .navbar a:hover {
+    color: var(--active-color);
+  }
+  .header .icons div {
+    color: white;
+    cursor: pointer;
+    font-size: 2rem;
+    margin-left: 2rem;
+  }
+  .header .icons div:hover {
+    color: var(--active-color);
+  }
+  #menu-btn {
+    display: none;
+  }
+  .header .search-form {
+    position: absolute;
+    top: -10rem;
+    left: 50%;
+    -ms-transform: translate(50%, 50%);
+    transform: translate(-50%, 0);
+    width: 50%;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    border: none;
+    border-radius: 2px;
+    overflow: hidden;
+    transform-origin: top;
+    background-color: white;
+    opacity: 0;
+    transition: all 1s ease;
+
+  }
+  .header .search-form.active {
+    top: 5rem;
+    opacity: 1;
+    transition: all 1s ease;
+    z-index: 11;
+  }
+  .header .search-form input {
+    height: 100%;
+    width: 100%;
+    font-size: 1.1rem;
+    color: black;
+    padding: 1rem;
+    text-decoration: none;
+    outline: none;
+    border: 0px solid white;
+  }
+  .header .search-form button {
+    cursor: pointer;
+    font-size: 2rem;
+    background-color: white;
+    border: none;
+  }
+  .header .search-form button:hover {
+    color: var(--active-color);
+  }
+
+  .header .cart-items-container {
+      position: absolute;
+      top: 0; right: -30rem;
+      height: auto;
+      width: 25rem;
+      background-color: rgb(227, 255, 174);
+      padding: 0 .5rem;
+      opacity: 0;
+      transition: 1s ease;
+  }
+  .header .cart-items-container .cart-item{
+      position: relative;
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+  }
+  .header .cart-items-container .cart-item li {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 10rem;
+    border-bottom: .1rem solid gray;
+  }
+  .header .cart-items-container .cart-item li .image-item img{
+    width: 8rem;
+    height: 8rem;
+  }
+  .header .cart-items-container .cart-item li .info-item {
+    width: 15rem;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 2rem;
+  }
+  .header .cart-items-container .cart-item li .info-item p {
+    font-size: 1.3rem;
+  }
+  .header .cart-items-container .cart-item li .info-item h3 {
+    font-size: 1.4rem;
+  }
+  .header .cart-items-container .cart-item li .fa-times {
+    position: absolute;
+    top: .5rem; right: .5rem;
+    font-size: 2rem;
+    cursor: pointer;
+    color: black;
+  }
+  .header .cart-items-container .cart-item li .fa-times:hover {
+    color: var(--active-color);
+  }
+  .header .cart-items-container .checkout-btn {
+    font-size: 1.2rem;
+    align-self: center;
+    margin: 10px auto;
+  }
+
+  .header .cart-items-container.show-cart {
+    position: absolute;
+    top: 5rem; right: 0rem;
+    height: auto;
+    width: 25rem;
+    background-color: rgb(227, 255, 174);
+    padding: 0 .5rem;
+    opacity: 1;
+    transition: 1s ease;
+    z-index: 11;
+    display: flex;
+    flex-direction: column;
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+
+
+
+
+/* media query */
+@media (max-width:860px) {
+  .header {
+    padding: 1rem 5%;
+  }
+}
+
+@media (max-width: 650px) {
+  #menu-btn {
+    display: inline-block;
+  }
+  .header .navbar {
+    position: absolute;
+    top: 5rem; right: -20rem;
+    background: rgb(214, 196, 196);
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: all 2s ease;
+  }
+  .header .navbar.showNav {
+    position: absolute;
+    top: 5rem; right: 0;
+    background: rgb(214, 196, 196);
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transition: all 2s ease;
+    z-index: 12;
+  }
+  .header .navbar a {
+    margin: 5px auto;
+  }
+}
