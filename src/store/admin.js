@@ -7,6 +7,7 @@ export default {
         add_videos: null,
         add_guppy: null,
         error_sending: null,
+        resultSending: null,
 
         list_guppy_info: [],
         list_guppy_info_root: [],
@@ -27,6 +28,7 @@ export default {
             state.add_images = null;
             state.add_videos = null;
             state.error_sending = null;
+            state.resultSending = null;
             console.log("reset: ",state.add_guppy,state.add_images,state.add_videos)
         },
         SET_ERROR(state, err) {
@@ -35,9 +37,13 @@ export default {
 
         SET_LIST_GUPPY_INFO(state, resp) {
             state.list_guppy_info = resp;
-            state.list_guppy_info_root = resp;
-            state.list_test = resp;
-            console.log(state.list_guppy_info_root)
+        },
+        SET_LIST_GUPPY_INFO_ROOT(state, resp) {
+            state.list_guppy_info_root = resp
+        },
+
+        SET_RESULT_SENDING(state, resp) {
+            state.resultSending = resp;
         }
     },
     actions: {
@@ -59,7 +65,7 @@ export default {
                 if(resp.data == 0) commit("SET_ERROR", "sending has error")
                 else commit("SET_ADD_VIDEOS", resp.data)
             } catch (err) {
-                console.log("error add images: ",err.resp)
+                console.log("error add videos: ",err.resp)
                 commit("SET_ERROR", "can not send!")
             }
         },
@@ -72,7 +78,7 @@ export default {
                 if(resp.data == 0) commit("SET_ERROR", "sending has error")
                 else commit("SET_ADD_GUPPY", resp.data)
             } catch (err) {
-                console.log("error add images: ",err.resp)
+                console.log("error add guppy: ",err.resp)
                 commit("SET_ERROR", "can not send!")
             }
         },
@@ -82,15 +88,36 @@ export default {
 
         async getListGuppyInfo({commit}, payload) {
             try {
-                if(payload == undefined || payload == null || payload == "") payload = "..."
-                let a = JSON.stringify({"filter" : payload})
-                console.log("name filter: ", a);
-                let resp = await axios.post('/admin/guppy-info', a)
+                if(payload == undefined || payload == "") payload = "..."
+                let resp = await axios.post('/admin/guppy-info', payload, {
+                    headers: {
+                        'Content-type': 'text/plain'
+                    }
+                })
                 console.log("resp: ",resp)
                 commit("SET_LIST_GUPPY_INFO", resp.data)
+                commit("SET_LIST_GUPPY_INFO_ROOT", resp.data)
             } catch (err) {
-                console.log("error add images: ",err.resp)
-                commit("SET_ERROR", "can'n get guppy info!")
+                console.log("error admin get guppy: ",err.resp)
+                commit("SET_ERROR", "can't get guppy info!")
+            }
+        },
+        async removeGuppy({commit}, id) {
+            try {
+                let resp = await axios.delete('/admin/guppy/' + id);
+                commit("SET_RESULT_SENDING", resp)
+            } catch(err) {
+                console.log("error remove images: ",err.resp)
+                commit("SET_ERROR", "can't remove!")
+            }
+        },
+        async updateGuppy({commit}, payload) {
+            try {
+                let resp = await axios.put('/admin/guppy', payload);
+                commit("SET_RESULT_SENDING", resp)
+            } catch(err) {
+                console.log("error update guppy: ",err.resp)
+                commit("SET_ERROR", "can't update!")
             }
         }
 

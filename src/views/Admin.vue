@@ -13,7 +13,7 @@
         class="add-guppy"
       />
       <ModifyGuppy
-        v-show="classAdmin == 'modify-guppy'"
+        v-if="classAdmin == 'modify-guppy'"
         class="modify-guppy"
       />
       <AddImagesVideos
@@ -21,7 +21,7 @@
         class="add-images-videos"
       />
       <ModifyImagesVideos
-        v-show="classAdmin == 'modify-images-videos'"
+        v-if="classAdmin == 'modify-images-videos'"
         class="modify-images-videos"
       />
       <Orders

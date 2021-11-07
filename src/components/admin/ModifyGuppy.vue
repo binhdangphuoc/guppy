@@ -6,10 +6,11 @@
         <button @click="getListGuppyInfo">Filter</button>
       </div>
       <div class="select-change">
-        <button @click="show = 1" :class="{'active': show == 1}">Guppy info</button>
-        <button @click="show = 2" :class="{'active': show == 2}">Guppy detail</button>
+        <button @click="show = 'info'" :class="{'active': show == 'info'}">Guppy info</button>
+        <button @click="show = 'detail'" :class="{'active': show == 'detail'}">Guppy detail</button>
+        <button @click="show = 'quantity'" :class="{'active': show == 'quantity'}">Guppy quannity</button>
       </div>
-      <div class="show-guppy-info">
+      <div class="show-guppy-info" v-show="show == 'info' || show == 'quantity'">
         <div class="guppy-info" v-for="(guppy, index) in listGuppyInfo" :key="index">
           <div v-show="editing" class="editing">Editting</div>
           <div class="row-1">
@@ -31,8 +32,8 @@
               </div>
               <div class="modify-number">
                 <label class="title">In stock:</label>
-                <label v-show="!array_edit[index]">{{ guppy.status }}</label>
-                <input v-show="array_edit[index]" type="checkbox" v-model="guppy.status">
+                <label v-show="show == 'info'">{{ guppy.status }}</label>
+
               </div>
             </div>
           </div>
@@ -58,8 +59,8 @@
           <div class="row-4">
             <button v-show="!array_edit[index]" @click="edit(index)">edit</button>
             <button v-show="array_edit[index]" @click="edited(index)">edited</button>
-            <button>remove</button>
-            <button>save</button>
+            <button @click="remove(index)">remove</button>
+            <button @click="update(guppy)">save</button>
           </div>
 
         </div>
@@ -88,10 +89,9 @@ export default {
         modify: 1,
         nameFilter: "",
         sendData: false,
-        show: 1,
         array_edit: [],
         editing: false,
-
+        show: "info",
       }
     },
     computed: {
@@ -99,7 +99,7 @@ export default {
         listGuppyInfo: (state) => state.admin.list_guppy_info,
         listGuppyInfoRoot: (state) => state.admin.list_guppy_info_root,
         has_error: (state) => state.admin.error_sending,
-        listTest: (state) => state.admin.list_test,
+        resultSend: (state) => state.admin.resultSending,
       })
     },
     mounted() {
@@ -108,7 +108,8 @@ export default {
     methods: {
       async getListGuppyInfo() {
         this.sendData = true;
-        await this.$store.dispatch("getListGuppyInfo");
+
+        await this.$store.dispatch("getListGuppyInfo", this.nameFilter);
         console.log("await error: ",this.has_error)
         if(this.has_error == null) this.sendData = false;
       },
@@ -117,10 +118,11 @@ export default {
         this.sendData = false;
         this.$store.dispatch("resetState");
       },
+
       test() {
         console.log("list change: ",this.listGuppyInfo[0])
         console.log("list root: ",this.listGuppyInfoRoot[0])
-        console.log("list test: ",this.listTest[0])
+
 
       },
       edit(index) {
@@ -150,6 +152,29 @@ export default {
         console.log("sau khi reset: ", this.listGuppyInfo[index])
         // this.listGuppyInfo[index] = this.listGuppyInfoRoot[index];
         this.edit(index);
+      },
+      async remove(index) {
+        console.log("remove ", index)
+        this.sendData = true
+        await this.$store.dispatch("removeGuppy", index)
+        if(this.resultSend == 0 || this.has_error != null) {
+          return
+        } else {
+          this.sendData = false
+
+        }
+      },
+       async update(g) {
+         this.sendData = true
+        console.log("update ", JSON.stringify(g))
+        await this.$store.dispatch("updateGuppy", JSON.stringify(g))
+        if(this.resultSend == 0 || this.has_error != null) {
+
+          return
+        } else {
+          this.sendData = false
+
+        }
       }
     },
 

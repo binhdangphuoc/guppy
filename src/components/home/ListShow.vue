@@ -18,7 +18,7 @@
                   {{ fish.sale | saleFormat }}
                 </div>
                 <div class="image">
-                  <a :href="'/detail/' + fish.id" @click="click(fish)">
+                  <a :href="'/detail/' + fish.id">
                     <img :src="fish.image" alt="fish">
                   </a>
                 </div>
@@ -32,7 +32,7 @@
                   </div>
                 </div>
                 <div class="icons" v-if="!fish.status">
-                  <div class="fas fa-cart-plus" @click="addToCart(fish, 1)">Add</div>
+                  <div class="fas fa-cart-plus" @click="addToCart(fish, 1)" v-if="fish.status == true">Add</div>
                 </div>
 
             </div>
@@ -120,9 +120,11 @@ export default {
       handleResize() {
             this.mywindow.width = window.innerWidth;
             this.mywindow.height = window.innerHeight;
-
-
-        }
+      },
+      // async detail(index) {
+      //   await this.$store.dispatch("getGuppyDetail", index);
+      //   console.log("get")
+      // }
     },
     computed: {
       size1() {

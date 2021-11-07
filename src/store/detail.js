@@ -1,4 +1,4 @@
-// import axios from 'axios'
+import axios from 'axios'
 export default {
     state: {
         guppy_detail: null,
@@ -9,23 +9,23 @@ export default {
         //     state.guppy_detail = detail
         //     console.log("mutations detail: ", state.guppy_detail)
         // },
-        SET_GUPPY_DETAIL(state, guppy) {
-            state.guppy_detail = guppy
+        SET_GUPPY_DETAIL(state, guppyDetail) {
+            state.guppy_detail = guppyDetail
+            console.log("guppy_detail = ", state.guppy_detail)
         }
 
     },
     actions: {
-        // async getDetail({commit}, id) {
-        //     try {
-        //         console.log("payload:",id)
-        //         let resp = await axios.get('/detail/'+id)
-        //         commit("SET_DETAIL", resp.data.detail)
-        //     } catch (err) {
-        //         console.log("error get detail: ",err.resp)
-        //     }
-        // },
-        getGuppyDetail({commit}, guppy) {
-            commit("SET_GUPPY_DETAIL", guppy)
-        }
+        async getGuppyDetail({commit}, id) {
+            try {
+                console.log("payload get detail id = ",id)
+                let resp = await axios.get('/guppy/'+id)
+                console.log("resp = ", resp.data)
+                commit("SET_GUPPY_DETAIL", resp.data)
+            } catch (err) {
+                console.log("error get detail: ",err.resp)
+            }
+        },
+
     }
 }

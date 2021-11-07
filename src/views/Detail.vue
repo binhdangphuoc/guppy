@@ -3,32 +3,33 @@
       <div class="detail">
         <div class="col-1" >
             <div class="image-active">
-                <img :src="detail.images[i]" alt="image-Show" style="width: 100%; height: 100%">
+                <img :src="detail.guppy.image" alt="image-Show" style="width: 100%; height: 100%">
             </div>
             <div class="images">
-                <img class="image"  v-for="(image,index) in detail.images" :key="image" :src="image" alt="image" style="width: 100%; height: 100%" @click="i=index">
+                <img class="image"  v-for="(image,index) in detail.images" :key="index" :src="image" alt="image" style="width: 100%; height: 100%" @click="i=index">
             </div>
         </div>
         <div class="col-2">
-            <h3>{{ detail.name }}</h3>
+            <h3>{{ detail.guppy.name }}</h3>
             <div class="describe">
-                {{ detail.describe }}
+                {{ detail.guppy._describe }}
             </div>
             <div class="small">
                 <div class="price">
-                    <span :class="{ 'have-sale': detail.sale>0 }">{{ detail.price | currencyFormat }}</span>
-                    <span v-show="detail.sale>0">{{ detail.price*(1-detail.sale) | currencyFormat }}</span>
+                    <span :class="{ 'have-sale': detail.guppy.sale>0 }">{{ detail.guppy.price | currencyFormat }}</span>
+                    <span v-show="detail.guppy.sale>0">{{ detail.guppy.price*(1-detail.guppy.sale) | currencyFormat }}</span>
                 </div>
                 <div class="quantity">
-                    <input type="number" min="1" max="1" v-model="quantity">
+                    <input type="number" min="1" max="detail.quantity" v-model="quantity" v-if="detail.quantity > 0">
+                    <p style="font-size: 1.5rem; margin-top: 1.5rem;">In stock: {{ detail.quantity }}</p>
                 </div>
             </div>
 
-            <button class="btn" @click="addToCart(detail)">Add to cart</button>
+            <button class="btn" @click="addToCart()" v-if="detail.quantity > 0">Add to cart</button>
         </div>
       </div>
     <div class="video">
-        <iframe width="560" height="315" :src="detail.video" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe width="560" height="315" v-for="(video,index) in detail.videos" :key="index" :src="detail.videos[index]" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
 
   </div>
@@ -43,16 +44,19 @@ export default {
     //     await this.$store.dispatch("getDetail", 1)
 
     // },
-    mounted() {
-        // this.idDetail = this.$route.path.substr(8,this.$route.path.length)
-        // this.$store.dispatch("getDetail", this.idDetail)
+    async beforeMount() {
 
-        console.log("get detail: ",this.detail)
-        // console.log("get detail: ",this.idDetail)
+        this.idDetail = this.$route.path.substr(8,this.$route.path.length)
+        console.log(" =>befor mount view detail: ", this.idDetail)
+        await this.$store.dispatch("getGuppyDetail", this.idDetail);
+    },
+    mounted() {
+        console.log("get detail (view): ",this.detail)
+
     },
     data() {
         return {
-            idDetail: "",
+
             quantity: 1,
 
         }
@@ -65,6 +69,9 @@ export default {
     methods: {
         showdetail() {
             console.log("=>",this.detail.id)
+        },
+        addToCart() {
+            this.$store.dispatch("addToCart", {guppy: this.detail.guppy, cnt: this.quantity})
         }
     }
 }
